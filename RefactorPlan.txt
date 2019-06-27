@@ -1,0 +1,10 @@
+-Move individual components of scene to their own files (Scene, cameras, lights, etc)
+-Move functions to their own files (light spawning, sorting, etc)
+-Figure out how to auto-sort without having to press button, 
+    probably a loop on a delay
+
+
+Program Flow:
+    Set Up Scene -> Set Up Plane -> Set Up Lighting ->Set Up Camera
+    ->Set Up Unsorted Array -> Spawn Trees ->Spawn Ghosts depending on numbers in Array
+    -> Sort Array, moving ghosts around to match -> When done, all green

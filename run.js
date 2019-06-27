@@ -140,39 +140,6 @@
         
     }
 
-//SORT AND SWAP
-    // function swap(items, oldIndex, newIndex){
-    //     var temp = items[oldIndex];
-    //     items[oldIndex] = items[newIndex];
-    //     items[newIndex] = temp;
-
-    // }
-
-    // function selectionSort(items){
-        
-    //     var tempArray = items;
-    //     var len = tempArray.length, min;
-    //     for(let i=0; i< len; i++)
-    //     {
-    //         min = i;
-           
-    //         for(var j=i+1; j<len; j++)
-    //         {
-    //             if(tempArray[j]<tempArray[min])
-    //             {
-    //                 min = j;
-    //             }
-    //         }
-
-    //             swap(tempArray, i, min);
-    //     }
-
-    //     return tempArray;
-    // };
-
-
-
-
     //Auxs
     function reset(array){
         if(!array)
@@ -228,13 +195,11 @@
 //WHISP ANIMATE
     function whispAnimate(tree, oldLight, i, j){
         var newLight = oldLight;
-        var testSprite = new THREE.Sprite(spriteMaterial);
-        
+        oldLight.remove();
         newLight.remove();
         newLight.position.x = oldLight.position.x;
         newLight.position.y = oldLight.position.y;
-        testSprite.scale.set(5,5,1);
-        newLight.add(testSprite);
+
         scene.add(newLight);
         var newX, newY, newZ;
 
@@ -259,6 +224,14 @@
         
         function smooth(t) { return t<0.5 ? 2*t*t : -1+(4-2*t)*t}
         loop();
+    }
+    //SET TO GREEN LIGHTS
+    function greenLights(lightArray){
+        for(var i=0; i<lightArray.length;i++){
+            for(var j=0; j<lightArray[i].length;j++){
+                lightArray[i][j].color.setHex(0x00FF00);
+            }
+        }
     }
 
     cameraControls.addEventListener("change", render, false);
@@ -295,44 +268,32 @@
     var innerIndex = 0;
     //SelectionSort Button
     selectionSortButton.addEventListener("click", function(){
-
-            var len = treeArray.length;
-            if (sortControlIndex >= len) return;
-            min = sortControlIndex;
+        var len = treeArray.length;
+        if (sortControlIndex >= len){
+            sortControlIndex =0;
+            greenLights(lightArray);
+            return;
+        } 
+         min = sortControlIndex;
             
-            for(var j=sortControlIndex+1; j<len; j++)
+        for(var j=sortControlIndex+1; j<len; j++){
+            if(lightArray[j].length<lightArray[min].length)
             {
-                if(lightArray[j].length<lightArray[min].length)
-                {
-                    min = j;
-                }
+                min = j;
             }
+        }
     
-            swapLight(sortControlIndex, min);
-            sortControlIndex++;
-            function swapLight(oldIndex, newIndex){
-                // console.log("before Tree Position:",oldIndex," to ",newIndex)
-                // console.log("lights:",lightArray[oldIndex].length," to ",lightArray[newIndex].length)
-                var temp = lightArray[oldIndex];
+        swapLight(sortControlIndex, min);
+        sortControlIndex++;
+        function swapLight(oldIndex, newIndex){
+            var temp = lightArray[oldIndex];
                 lightArray[oldIndex] = lightArray[newIndex];
                 lightArray[newIndex] = temp;
-                // console.log("after Tree Position:",oldIndex," to ",newIndex)
-                // console.log("lights:",lightArray[oldIndex].length," to ",lightArray[newIndex].length)
             }
     });
-    
-    // bubbleSortButton.addEventListener("click", function(){
-    //     var swapped;
-    //     do{
-    //         if(lightArray[outerIndex] && lightArrray[outerIndex+1] && lightArray[outerIndex]>lightArray[i+1])
-    //         {
-    //             swapped(outerIndex, outerIndex+1);
-    //             swapped = true;
-    //         }
-    //     } while(swapped);
-    // })
-	animate();
-        
+
+    animate();
+
     let resize = function () {
         renderer.setSize(window.innerWidth, window.innerHeight);
         camera.aspect = window.innerWidth / window.innerHeight;
